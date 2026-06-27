@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
-import 'package:stem_shop/common/styles/spacing_styles.dart';
-import 'package:stem_shop/features/authentication/controllers/login/loging_controllers.dart';
-import 'package:stem_shop/utils/constants/colors.dart';
-import 'package:stem_shop/utils/constants/image_strings.dart';
-import 'package:stem_shop/utils/constants/sizes.dart';
-import 'package:stem_shop/utils/helpers/helper_functions.dart';
 import 'widgets/login_header.dart';
 import 'widgets/login_form.dart';
 

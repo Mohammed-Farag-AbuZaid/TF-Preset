@@ -4,12 +4,6 @@ import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:stem_shop/features/authentication/controllers/login/loging_controllers.dart';
-import 'package:stem_shop/features/authentication/screens/password_configrations/forget_password.dart';
-import 'package:stem_shop/utils/constants/sizes.dart';
-import 'package:stem_shop/utils/constants/text_strings.dart';
-import 'package:stem_shop/utils/popups/loaders.dart';
-import 'package:stem_shop/utils/validators/validation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginForm extends StatelessWidget {

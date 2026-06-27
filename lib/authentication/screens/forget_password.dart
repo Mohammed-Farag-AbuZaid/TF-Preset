@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:stem_union/authentication/controllers/forget_password_controller.dart';
 
 class ForgetPassword extends StatelessWidget {

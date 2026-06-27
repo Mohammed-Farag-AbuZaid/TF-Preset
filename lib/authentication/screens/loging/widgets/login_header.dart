@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:stem_shop/utils/constants/image_strings.dart';
-import 'package:stem_shop/utils/constants/sizes.dart';
-import 'package:stem_shop/utils/constants/text_strings.dart';
 
 class LoginHeader extends StatelessWidget {
   const LoginHeader({

@@ -24,6 +24,12 @@ dependencies:
   lottie: ^3.4.0
   iconsax: ^0.0.8
   shimmer: ^3.0.0
+  image_picker: ^1.2.2
+  cloudinary_public: ^0.23.1
+  cross_file: ^0.3.5+2
+  http: ^1.6.0
+  cached_network_image: ^3.4.1
+  google_sign_in: ^7.2.0
 
 dev_dependencies:
   flutter_test:
