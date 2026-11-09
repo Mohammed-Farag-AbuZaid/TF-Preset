@@ -1,17 +1,33 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cross_file/cross_file.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_disposable.dart';
+import 'package:http/http.dart' as http;
 
 class UserRepository extends GetxService {
   static UserRepository get instance => Get.find();
 
   static const String _cloudinaryCloudName = 'ddf0yaapn';
+  static const String _tfApiBaseUrl = 'https://n8n.tfunions.com/tf-api';
 
   FirebaseFirestore get _db => FirebaseFirestore.instance;
-  Future<void> saveUserRecord(UserModel user) async {
+
+  Future<void> saveUserRecord(dynamic user) async {
+    try {
+      await http
+          .put(
+            Uri.parse('$_tfApiBaseUrl/api/collections/users/${user.id}'),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode(user.toJson()),
+          )
+          .timeout(const Duration(seconds: 6));
+      return;
+    } catch (_) {}
+
     try {
       final docRef = _db.collection("users").doc(user.id);
       final existing = await docRef.get();
@@ -29,111 +45,67 @@ class UserRepository extends GetxService {
     }
   }
 
-  Future<UserModel> fetchUserDetails() async {
+  Future<Map<String, dynamic>> fetchUserDetailsMap([String? uid]) async {
+    final targetUid = uid ?? FirebaseAuth.instance.currentUser?.uid ?? '';
+    if (targetUid.isEmpty) return {};
     try {
-      final documentSnapshot = await _db
-          .collection("users")
-          .doc(FirebaseAuth.instance.currentUser?.uid)
-          .get();
-      if (documentSnapshot.exists) {
-        return UserModel.fromSnapshot(documentSnapshot);
-      } else {
-        return UserModel.empty();
+      final res = await http
+          .get(Uri.parse('$_tfApiBaseUrl/api/collections/users/$targetUid'))
+          .timeout(const Duration(seconds: 6));
+      if (res.statusCode == 200) {
+        final body = jsonDecode(res.body) as Map<String, dynamic>;
+        return (body['data'] as Map<String, dynamic>?) ?? body;
       }
-    } on FirebaseException catch (e) {
-      throw TFirebaseException(e.code).message;
-    } on FormatException catch (_) {
-      throw const TFormatException();
-    } catch (e) {
-      throw 'Something went wrong. Please try again';
-    }
-  }
+    } catch (_) {}
 
-  Future<void> updateUserDetails(UserModel updatedUser) async {
-    try {
-      await _db
-          .collection("users")
-          .doc(updatedUser.id)
-          .update(updatedUser.toJson());
-    } on FirebaseException catch (e) {
-      throw TFirebaseException(e.code).message;
-    } on FormatException catch (_) {
-      throw const TFormatException();
-    } catch (e) {
-      throw 'Something went wrong. Please try again';
-    }
+    final documentSnapshot = await _db.collection("users").doc(targetUid).get();
+    return documentSnapshot.data() ?? {};
   }
 
   Future<void> updateSingleField(Map<String, dynamic> json) async {
+    final uid = FirebaseAuth.instance.currentUser?.uid ?? '';
     try {
-      await _db
-          .collection("users")
-          .doc(FirebaseAuth.instance.currentUser?.uid)
-          .update(json);
-    } on FirebaseException catch (e) {
-      throw TFirebaseException(e.code).message;
-    } on FormatException catch (_) {
-      throw const TFormatException();
-    } catch (e) {
-      throw 'Something went wrong. Please try again';
-    }
+      await http
+          .put(
+            Uri.parse('$_tfApiBaseUrl/api/collections/users/$uid'),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode(json),
+          )
+          .timeout(const Duration(seconds: 6));
+      return;
+    } catch (_) {}
+
+    await _db.collection("users").doc(uid).update(json);
   }
 
-  /// Function to remove user data from Firestore.
   Future<void> removeUserRecord(String userId) async {
     try {
-      await _db.collection("users").doc(userId).delete();
-    } on FirebaseException catch (e) {
-      throw TFirebaseException(e.code).message;
-    } on FormatException catch (_) {
-      throw const TFormatException();
-    } catch (e) {
-      throw 'Something went wrong. Please try again';
-    }
+      await http
+          .delete(Uri.parse('$_tfApiBaseUrl/api/collections/users/$userId'))
+          .timeout(const Duration(seconds: 6));
+      return;
+    } catch (_) {}
+
+    await _db.collection("users").doc(userId).delete();
   }
 
-  /// upload any image
   Future<String> uploadImage(String uploadPreset, XFile image) async {
-    try {
-      final url = Uri.parse(
-        'https://api.cloudinary.com/v1_1/$_cloudinaryCloudName/image/upload',
-      );
+    final url = Uri.parse(
+      'https://api.cloudinary.com/v1_1/$_cloudinaryCloudName/image/upload',
+    );
 
-      final request = http.MultipartRequest('POST', url)
-        ..fields['upload_preset'] = uploadPreset
-        ..files.add(await http.MultipartFile.fromPath('file', image.path));
+    final request = http.MultipartRequest('POST', url)
+      ..fields['upload_preset'] = uploadPreset
+      ..files.add(await http.MultipartFile.fromPath('file', image.path));
 
-      final response = await request.send();
-      final responseBody = await response.stream.bytesToString();
+    final response = await request.send();
+    final responseBody = await response.stream.bytesToString();
 
-      if (response.statusCode != 200) {
-        throw 'Cloudinary upload failed: $responseBody';
-      }
-
-      final data = jsonDecode(responseBody) as Map<String, dynamic>;
-      return data['secure_url'] as String;
-    } on FormatException catch (_) {
-      throw const TFormatException();
-    } catch (e) {
-      throw 'Something went wrong while uploading the image: $e';
+    if (response.statusCode != 200) {
+      throw 'Cloudinary upload failed: $responseBody';
     }
-  }
 
-  /// Fetch user details by user ID
-  Future<UserModel> fetchUserById(String userId) async {
-  try {
-    final documentSnapshot = await _db.collection("users").doc(userId).get();
-    if (documentSnapshot.exists) {
-      return UserModel.fromSnapshot(documentSnapshot);
-    } else {
-      return UserModel.empty();
-    }
-  } on FirebaseException catch (e) {
-    throw TFirebaseException(e.code).message;
-  } on FormatException catch (_) {
-    throw const TFormatException();
-  } catch (e) {
-    throw 'Something went wrong. Please try again';
+    final data = jsonDecode(responseBody) as Map<String, dynamic>;
+    return data['secure_url'] as String;
   }
-}
 }
