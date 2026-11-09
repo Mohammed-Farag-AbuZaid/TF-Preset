@@ -1,57 +1,61 @@
 import 'package:flutter/material.dart';
 
+/// TF Unions Academic Vanguard Design Tokens
+/// High-contrast tactile surfaces, Slate-50 canvas, elevated white cards,
+/// Deep Academic Oxford Blue, Electric Cobalt actions, and zero generic AI clichés.
 class TColors {
   TColors._();
 
-  // Minimalist TF Design Tokens
-  static const Color primary = Color(0xFF002583);
-  static const Color secondry = Color(0xFF002583);
-  static const Color accent = Color(0xFF002583);
+  // Core Brand Tokens
+  static const Color primary = Color(0xFF0A2540);       // Deep Academic Oxford Blue
+  static const Color secondry = Color(0xFF0052FF);      // Electric Oxford Cobalt
+  static const Color accent = Color(0xFFD97706);        // Scholar Honors Amber
 
-  // Text Colors
-  static const Color textprimary = Color(0xFF1D1D1F);
-  static const Color textsecondry = Color(0xFF6E6E73);
+  // Text Colors (High Contrast & Clear Readability)
+  static const Color textprimary = Color(0xFF0F172A);   // Slate 900
+  static const Color textsecondry = Color(0xFF475569);  // Slate 600
   static const Color textwhite = Colors.white;
 
-  // Background Colors
-  static const Color light = Color(0xFFFFFFFF);
-  static const Color dark = Color(0xFF1D1D1F);
-  static const Color primaryBackground = Color(0xFFFFFFFF);
+  // Background Canvas Colors
+  static const Color light = Color(0xFFF8FAFC);         // Slate 50 Canvas
+  static const Color dark = Color(0xFF0F172A);          // Slate 900
+  static const Color primaryBackground = Color(0xFFF8FAFC);
 
-  // Background Container Colors
-  static const Color lightContainer = Color(0xFFF5F5F7);
-  static Color darkContainer = Colors.white.withValues(alpha: 0.1);
+  // Background Container & Card Surfaces
+  static const Color lightContainer = Color(0xFFFFFFFF); // Pure White Elevated Card
+  static Color darkContainer = const Color(0xFF1E293B);
 
   // Button Colors
-  static const Color buttonPrimary = Color(0xFF002583);
-  static const Color buttonSecondary = Color(0xFF6E6E73);
-  static const Color buttonDisabled = Color(0xFFD2D2D7);
+  static const Color buttonPrimary = Color(0xFF0052FF);  // High-Affordance Cobalt
+  static const Color buttonSecondary = Color(0xFFF1F5F9);// Inset Well / Neutral
+  static const Color buttonDisabled = Color(0xFFCBD5E1);
 
-  // Border Colors
-  static const Color borderPrimary = Color(0xFFD2D2D7);
-  static const Color borderSecondary = Color(0xFFE5E5EA);
+  // Border & Hairline Colors
+  static const Color borderPrimary = Color(0xFFE2E8F0);  // Slate 200 (Distinct Boundary)
+  static const Color borderSecondary = Color(0xFFCBD5E1);// Slate 300 (Input / Hover)
 
-  // Error and Validation Colors
-  static const Color error = Color(0xFFB3261E);
-  static const Color success = Color(0xFF1F7A3E);
-  static const Color warning = Color(0xFFF57C00);
-  static const Color info = Color(0xFF002583);
+  // Status & Validation Colors
+  static const Color error = Color(0xFFDC2626);          // Red 600
+  static const Color success = Color(0xFF059669);        // Emerald 600
+  static const Color warning = Color(0xFFD97706);        // Amber 600
+  static const Color info = Color(0xFF0052FF);           // Cobalt 600
 
-  // Neutral Shades
-  static const Color black = Color(0xFF1D1D1F);
-  static const Color darkerGrey = Color(0xFF4F4F4F);
-  static const Color darkGrey = Color(0xFF6E6E73);
-  static const Color grey = Color(0xFFD2D2D7);
-  static const Color softgrey = Color(0xFFF5F5F7);
-  static const Color lightgrey = Color(0xFFFAFAFC);
+  // Neutral Palette
+  static const Color black = Color(0xFF0F172A);
+  static const Color darkerGrey = Color(0xFF334155);
+  static const Color darkGrey = Color(0xFF64748B);
+  static const Color grey = Color(0xFFCBD5E1);
+  static const Color softgrey = Color(0xFFF1F5F9);
+  static const Color lightgrey = Color(0xFFF8FAFC);
   static const Color white = Color(0xFFFFFFFF);
 
+  // Clean Non-AI Linear Gradient (Subtle Tone on Tone)
   static const Gradient linearGradient = LinearGradient(
     begin: Alignment(0.0, 0.0),
     end: Alignment(0.707, -0.707),
     colors: [
-      Color(0xFFFFFFFF),
-      Color(0xFFF5F5F7),
+      Color(0xFF0A2540),
+      Color(0xFF0052FF),
     ],
   );
 }
